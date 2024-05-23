@@ -59,15 +59,17 @@ void SnakeBody::move(int ch, GameItem * itemManager) {
 	nowHead = movePos;
 
 	//Poison item ¸ÔÀº °æ¿ì
-	auto it1 = find(itemManager->getPoison().begin(), itemManager->getPoison().end(), movePos);
-	auto it2 = find(itemManager->getGrow().begin(), itemManager->getGrow().end(), movePos);
-	if (it1!=itemManager->getPoison().end()) {
+	vector<pair<int, int>> poison = itemManager->getPoison();
+	vector<pair<int, int>> grow = itemManager->getGrow();
+	vector<pair<int,int>>::iterator it1 = find(poison.begin(), poison.end(), movePos);
+	vector<pair<int, int>>::iterator it2 = find(grow.begin(), grow.end(), movePos);
+	if (it1!=poison.end()) {
 		snakebody.pop_back();
 		GameItem::used_poison++;
 	}
 	//Grow item ¸ÔÀº °æ¿ì
 	
-	else if (it2!=itemManager->getGrow().end()) {
+	else if (it2!=grow.end()) {
 		switch (nowDirection) {
 		case KEY_UP:
 			snakebody.push_front({ nowHead.first - 1, nowHead.second });

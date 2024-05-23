@@ -49,7 +49,7 @@ void SnakeGame::gameStart() {
 		refresh();
 
 		
-		//Sleep(gameDelay);
+		Sleep(5);
 		werase(stdscr);
 		
 	}
