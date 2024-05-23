@@ -1,7 +1,7 @@
 #include "Map.h"
 
 
-Map::Map():BoardxSize(46),BoardySize(23) {
+Map::Map():BoardxSize(46),BoardySize(23),window_xSize(70),window_ySize(50) {
 }
 
 void Map::draw() {

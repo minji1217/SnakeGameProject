@@ -1,9 +1,17 @@
 #include "SnakeBody.h"
 #include "GameItem.h"
+#include <cstdlib>
+#include <ctime>
 #include <curses.h>
 
 
-SnakeBody::SnakeBody():isDead(false) {
+SnakeBody::SnakeBody():isDead(false){
+	srand((unsigned int)time(NULL));
+
+	maxLength = rand() % 5 + 10; //5~10
+	maxPoison = rand() % 3 + 3; //2~5
+	maxGrowth = rand() % 3 + 3; //2~5
+	maxGate = rand() % 2 + 1; //1~2
 	preHead = make_pair(10, 11);
 	nowHead = make_pair(10, 10);
 	snakebody.push_back({10,10});
@@ -13,6 +21,9 @@ SnakeBody::SnakeBody():isDead(false) {
 }
 
 
+int SnakeBody::used_grow=0;
+int SnakeBody::used_poison=0;
+int SnakeBody::used_gate = 0;
 
 void SnakeBody::move(int ch, GameItem * itemManager) {
 	pair<int, int> movePos;
@@ -65,7 +76,7 @@ void SnakeBody::move(int ch, GameItem * itemManager) {
 	vector<pair<int, int>>::iterator it2 = find(grow.begin(), grow.end(), movePos);
 	if (it1!=poison.end()) {
 		snakebody.pop_back();
-		GameItem::used_poison++;
+		used_poison++;
 	}
 	//Grow item ¸ÔÀº °æ¿ì
 	
@@ -87,7 +98,7 @@ void SnakeBody::move(int ch, GameItem * itemManager) {
 
 		preHead = nowHead;
 		nowHead = snakebody.front();
-		GameItem::used_grow++;
+		used_grow++;
 	}
 
 

@@ -6,8 +6,6 @@
 #define MAP_XSIZE 45
 #define MAP_YSIZE 22
 
-int GameItem::used_grow = 0;
-int GameItem::used_poison = 0;
 
 
 void GameItem::generateItem(SnakeBody * snake) {

@@ -18,11 +18,16 @@ public:
 	~SnakeGame();
 	SnakeGame();
 	void gameStart();
-	WINDOW* printMissionBoard();
-	WINDOW* printScoreBoard();
+	void printMissionBoard();
+	void printStatusBoard();
+
+	void finish();
+	bool isSuccess();
 
 private:
 	
+	int max_xpos; //가로
+	int max_ypos; //세로
 	Map* map;
 	SnakeBody* player;
 	GameItem* itemManager;

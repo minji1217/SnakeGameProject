@@ -31,7 +31,6 @@ public:
 	vector<pair<int, int>> getPoison() {
 		return poison;
 	}
-	static int used_grow;
-	static int used_poison;
+	
 };
 

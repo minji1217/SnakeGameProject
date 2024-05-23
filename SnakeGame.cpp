@@ -1,5 +1,5 @@
 #include "SnakeGame.h"
-
+#include "Windows.h"
 
 SnakeGame::SnakeGame() {
 	
@@ -8,7 +8,6 @@ SnakeGame::SnakeGame() {
 	//gate= new Gate();
 	itemManager= new GameItem();
 	
-
 }
 
 SnakeGame::~SnakeGame() {
@@ -25,18 +24,19 @@ void SnakeGame::gameStart() {
 	keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
 
-	start_color();
+	getmaxyx(stdscr, max_xpos, max_ypos); //xpos, ypos는 각각 행열로 나타낸 좌표가 아니라 평면좌표에서 봤을 때의 좌표
 	
-	WINDOW* w1 = printMissionBoard();
-	WINDOW* w2 = printScoreBoard();
-	wrefresh(w1);
-	wrefresh(w2);
+
+	start_color();
+
 	int ch;
 	while (1) {
 		
-		
 		map->draw();
+		printMissionBoard();
+		printStatusBoard();
 		itemManager->generateItem(player);
+		
 		player->draw();
 		ch = getch();
 		if (ch != ERR) {
@@ -45,11 +45,14 @@ void SnakeGame::gameStart() {
 				break;
 			}
 		}
-
-		refresh();
-
-		
+		if (isSuccess()) {
+			clear();
+			finish();
+		}
 		Sleep(5);
+		
+		refresh();
+		
 		werase(stdscr);
 		
 	}
@@ -57,25 +60,95 @@ void SnakeGame::gameStart() {
 	endwin();
 }
 
+bool SnakeGame::isSuccess() {
+	if (SnakeBody::used_gate == player->maxGate && SnakeBody::used_poison == player->maxPoison &&
+		SnakeBody::used_grow == player->maxGrowth && SnakeBody::used_grow == player->maxGrowth) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
-WINDOW * SnakeGame::printMissionBoard() {
-	WINDOW* win = newwin(30, 20, 0, 50);
-	for (int i = 0; i < 20; i++) {
-		int j = 0;
-		for ( j = 0; j < 30; j++) {
-			if (i == 0 || i == 19 || j == 0 || j == 28) {
-				mvwprintw(win, i, j, "X");
+void SnakeGame::finish() {
+	while (1) {
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1 | 15 << 4); //fg: blue, bg: white
+		printf("SUCCESS!");
+	}
+}
+
+void SnakeGame::printMissionBoard() {
+	//전체 게임 보드판이 23,46임
+
+	//판을 두 개로 하기때문에 사이즈 반반씩
+	for (int r = 0; r < 7; r++) {
+		for (int c = 48; c < 70; c++) {
+			if (r == 0 || r == 6) {
+				mvprintw(r, c, "*");
+			}
+			else if (c == 48 || c == 69) {
+				mvprintw(r, c, "*");
 			}
 		}
-		
+	}
+
+	mvaddstr(1, 50, "Score Board");
+	mvaddstr(2, 50, "B: ");
+	printw("%d / %d", player->snakebody.size(),player->maxLength );
+	mvaddstr(3, 50, "+: ");
+	printw("%d", player->used_grow);
+	mvaddstr(4, 50, "-: ");
+	printw("%d", player->used_poison);
+	mvaddstr(5, 50, "G: ");
+	printw("%d", player->used_gate);
+}
+
+void SnakeGame::printStatusBoard() {
+
+	for (int r = 11; r < 18; r++) {
+		for (int c = 48; c < 70; c++) {
+			if (r == 11 || r == 17) {
+				mvprintw(r, c, "*");
+			}
+			else if (c == 48 || c == 69) {
+				mvprintw(r, c, "*");
+			}
+		}
+	}
+
+	mvaddstr(12, 50, "Mission");
+	mvaddstr(13, 50, "B: ");
+	printw("%-3d", player->maxLength);
+	if (player->snakebody.size() == player->maxLength) {
+		addstr("( V )");
+	}
+	else {
+		addstr("(   )");
+	}
+	mvaddstr(14, 50, "+: ");
+	printw("%-3d", player->maxGrowth);
+	if (SnakeBody::used_grow == player->maxGrowth) {
+		addstr("( V )");
+	}
+	else {
+		addstr("(   )");
+	}
+	mvaddstr(15, 50, "-: ");
+	printw("%-3d", player->maxPoison);
+	if (SnakeBody::used_poison== player->maxPoison) {
+		addstr("( V )");
+	}
+	else {
+		addstr("(   )");
+	}
+	mvaddstr(16, 50, "G: ");
+	printw("%-3d", player->maxGate);
+	if (SnakeBody::used_gate == player->maxGate) {
+		addstr("( V )");
+	}
+	else {
+		addstr("(   )");
 	}
 	
-
-	return win;
-}
-WINDOW * SnakeGame::printScoreBoard() {
-
-	WINDOW* win = newwin(30, 20, 20, 50);
-	box(win,0,0);
-	return win;
+	
 }

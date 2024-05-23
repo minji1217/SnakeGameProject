@@ -10,4 +10,6 @@ public:
 private:
 	int BoardxSize;
 	int BoardySize;
+	int window_xSize;
+	int window_ySize;
 };
