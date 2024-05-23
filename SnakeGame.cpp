@@ -2,7 +2,6 @@
 
 
 SnakeGame::SnakeGame() {
-	gameDelay = 2;
 	
 	map = new Map();
 	player= new SnakeBody();
@@ -26,6 +25,12 @@ void SnakeGame::gameStart() {
 	keypad(stdscr, TRUE);
 	nodelay(stdscr, TRUE);
 
+	start_color();
+	
+	WINDOW* w1 = printMissionBoard();
+	WINDOW* w2 = printScoreBoard();
+	wrefresh(w1);
+	wrefresh(w2);
 	int ch;
 	while (1) {
 		
@@ -43,9 +48,34 @@ void SnakeGame::gameStart() {
 
 		refresh();
 
-		Sleep(gameDelay);
-		clear();
+		
+		//Sleep(gameDelay);
+		werase(stdscr);
+		
 	}
 
 	endwin();
+}
+
+
+WINDOW * SnakeGame::printMissionBoard() {
+	WINDOW* win = newwin(30, 20, 0, 50);
+	for (int i = 0; i < 20; i++) {
+		int j = 0;
+		for ( j = 0; j < 30; j++) {
+			if (i == 0 || i == 19 || j == 0 || j == 28) {
+				mvwprintw(win, i, j, "X");
+			}
+		}
+		
+	}
+	
+
+	return win;
+}
+WINDOW * SnakeGame::printScoreBoard() {
+
+	WINDOW* win = newwin(30, 20, 20, 50);
+	box(win,0,0);
+	return win;
 }

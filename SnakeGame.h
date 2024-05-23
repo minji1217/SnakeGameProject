@@ -18,10 +18,11 @@ public:
 	~SnakeGame();
 	SnakeGame();
 	void gameStart();
-	
+	WINDOW* printMissionBoard();
+	WINDOW* printScoreBoard();
 
 private:
-	int gameDelay;
+	
 	Map* map;
 	SnakeBody* player;
 	GameItem* itemManager;
