@@ -31,7 +31,7 @@ void GameItem::generateItem(SnakeBody * snake) {
 	}
 
 	int itemSize; //grow,poison item 몇개 생성할 건지
-	itemSize = rand() % 2 + 2; //최소 2개에서 3개까지 
+	itemSize = 20;//rand() % 2 + 2; //최소 2개에서 3개까지 
 
 	for (int i = 0; i < itemSize; i++) {
 		int whatItem; //무슨 아이템 만들건지 0이면 grow, 1이면 trim
@@ -55,7 +55,7 @@ void GameItem::generateItem(SnakeBody * snake) {
 		}
 	}
 	
-	draw();
+	
 }
 
 void GameItem::draw() {
@@ -67,7 +67,7 @@ void GameItem::draw() {
 	for (it2; it2 != grow.end(); it2++) {
 		mvprintw(it2->first, it2->second, "G");
 	}
-
+	
 	
 }
 

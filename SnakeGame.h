@@ -17,11 +17,11 @@ class SnakeGame
 public:
 	~SnakeGame();
 	SnakeGame();
-	void gameStart();
+	bool gameStart();
 	void printMissionBoard();
 	void printStatusBoard();
-
-	void finish();
+	static int playGame;
+	
 	bool isSuccess();
 
 private:

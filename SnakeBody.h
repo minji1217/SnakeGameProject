@@ -14,6 +14,7 @@ class SnakeBody: public DrawInter
 {
 public:
 	SnakeBody();
+	static bool successLength; //목표 뱀길이 달성여부 
 	static int used_grow;
 	static int used_poison;
 	static int used_gate;

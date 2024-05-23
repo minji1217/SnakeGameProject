@@ -1,12 +1,15 @@
 #include "SnakeGame.h"
 #include "Windows.h"
 
+int SnakeGame::playGame = 0;
+
 SnakeGame::SnakeGame() {
 	
 	map = new Map();
 	player= new SnakeBody();
 	//gate= new Gate();
 	itemManager= new GameItem();
+	playGame++;
 	
 }
 
@@ -17,7 +20,7 @@ SnakeGame::~SnakeGame() {
 	delete itemManager;
 }
 
-void SnakeGame::gameStart() {
+bool SnakeGame::gameStart() {
 	initscr();
 	noecho(); //입력값 숨기기
 	curs_set(false); //커서 숨기기
@@ -28,15 +31,19 @@ void SnakeGame::gameStart() {
 	
 
 	start_color();
+	init_color(1, 0, 1000, 0);
+	init_color(2, 0, 0, 1000);
+	init_pair(1, 1, 2);
 
 	int ch;
 	while (1) {
-		
+		mvprintw(25,0,"===========================================ROUND %d===============================================", SnakeGame::playGame);
 		map->draw();
 		printMissionBoard();
 		printStatusBoard();
 		itemManager->generateItem(player);
-		
+		itemManager->draw();
+
 		player->draw();
 		ch = getch();
 		if (ch != ERR) {
@@ -46,8 +53,8 @@ void SnakeGame::gameStart() {
 			}
 		}
 		if (isSuccess()) {
-			clear();
-			finish();
+			endwin();
+			return true;
 		}
 		Sleep(5);
 		
@@ -61,8 +68,8 @@ void SnakeGame::gameStart() {
 }
 
 bool SnakeGame::isSuccess() {
-	if (SnakeBody::used_gate == player->maxGate && SnakeBody::used_poison == player->maxPoison &&
-		SnakeBody::used_grow == player->maxGrowth && SnakeBody::used_grow == player->maxGrowth) {
+	if (/*SnakeBody::used_gate == player->maxGate  &&*/ player->successLength==true &&\
+		SnakeBody::used_grow >= player->maxGrowth && SnakeBody::used_poison >= player->maxPoison) {
 		return true;
 	}
 	else {
@@ -70,14 +77,9 @@ bool SnakeGame::isSuccess() {
 	}
 }
 
-void SnakeGame::finish() {
-	while (1) {
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 1 | 15 << 4); //fg: blue, bg: white
-		printf("SUCCESS!");
-	}
-}
 
-void SnakeGame::printMissionBoard() {
+
+void SnakeGame::printStatusBoard() {
 	//전체 게임 보드판이 23,46임
 
 	//판을 두 개로 하기때문에 사이즈 반반씩
@@ -103,7 +105,7 @@ void SnakeGame::printMissionBoard() {
 	printw("%d", player->used_gate);
 }
 
-void SnakeGame::printStatusBoard() {
+void SnakeGame::printMissionBoard() {
 
 	for (int r = 11; r < 18; r++) {
 		for (int c = 48; c < 70; c++) {
@@ -119,15 +121,20 @@ void SnakeGame::printStatusBoard() {
 	mvaddstr(12, 50, "Mission");
 	mvaddstr(13, 50, "B: ");
 	printw("%-3d", player->maxLength);
-	if (player->snakebody.size() == player->maxLength) {
+	if (SnakeBody::successLength) {
 		addstr("( V )");
+	}
+	else if (player->snakebody.size() == player->maxLength) {
+		addstr("( V )");
+		SnakeBody::successLength = true;
 	}
 	else {
 		addstr("(   )");
 	}
 	mvaddstr(14, 50, "+: ");
 	printw("%-3d", player->maxGrowth);
-	if (SnakeBody::used_grow == player->maxGrowth) {
+	if (SnakeBody::used_grow>=player->maxGrowth) {
+		//목표 길이 달성했다면 그 이후로는 계속 목표달성했다고 체크표시
 		addstr("( V )");
 	}
 	else {
@@ -135,7 +142,7 @@ void SnakeGame::printStatusBoard() {
 	}
 	mvaddstr(15, 50, "-: ");
 	printw("%-3d", player->maxPoison);
-	if (SnakeBody::used_poison== player->maxPoison) {
+	if (SnakeBody::used_poison>= player->maxPoison) {
 		addstr("( V )");
 	}
 	else {
@@ -143,7 +150,7 @@ void SnakeGame::printStatusBoard() {
 	}
 	mvaddstr(16, 50, "G: ");
 	printw("%-3d", player->maxGate);
-	if (SnakeBody::used_gate == player->maxGate) {
+	if (SnakeBody::used_gate >= player->maxGate) {
 		addstr("( V )");
 	}
 	else {
