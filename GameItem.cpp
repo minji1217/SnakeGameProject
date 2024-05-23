@@ -40,12 +40,16 @@ void GameItem::generateItem(SnakeBody * snake) {
 		idx = rand() % possible.size();
 		if (whatItem) {
 			//1인 경우
+			while (find(poison.begin(), poison.end(), possible[idx]) != poison.end() && find(grow.begin(),grow.end(), possible[idx])!=grow.end()) {
+				//만약 중복이 있다면
+				idx = rand() % possible.size();
+			}
 			poison.push_back(possible[idx]);
 		}
 		else {
 			//0인 경우 
 			//이때 아이템이 중복될 수 있기에 중복방지하는 while문생성
-			while (find(poison.begin(), poison.end(), possible[idx]) != poison.end()) {
+			while (find(poison.begin(), poison.end(), possible[idx]) != poison.end() && find(grow.begin(), grow.end(), possible[idx]) != grow.end()) {
 				//만약 중복이 있다면
 				idx = rand() % possible.size();
 			}
