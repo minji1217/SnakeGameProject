@@ -127,8 +127,10 @@ void SnakeBody::draw() {
 	deque<pair<int, int>>::iterator it = snakebody.begin();
 	for (it ; it != snakebody.end(); it++) {
 		if (it == snakebody.begin()) {
-			mvaddch(it->first, it->second, '#' | COLOR_PAIR(1));
+			mvaddch(it->first, it->second, ' ' | COLOR_PAIR(1));
 		}
-		mvprintw(it->first, it->second, "#");
+		else {
+			mvaddch(it->first, it->second, ' ' | COLOR_PAIR(2));
+		}
 	}
 }

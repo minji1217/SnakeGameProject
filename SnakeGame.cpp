@@ -37,6 +37,7 @@ bool SnakeGame::gameStart() {
 	init_color(1, 0, 1000, 0);
 	init_color(2, 0, 0, 1000);
 	init_pair(1, 1, 2);
+	init_pair(2,2,1);
 
 	int ch;
 	while (1) {
