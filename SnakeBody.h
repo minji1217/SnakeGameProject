@@ -27,6 +27,7 @@ public:
 	void move(int ch, GameItem * itemManager);
 	pair<int, int> getHead()const { return nowHead; }
 	deque<pair<int, int>> snakebody;
+	void init();
 private:
 	
 	pair<int, int> preHead;

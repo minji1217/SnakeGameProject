@@ -20,6 +20,14 @@ SnakeBody::SnakeBody():isDead(false){
 	nowDirection = KEY_LEFT;
 }
 
+void SnakeBody::init() {
+
+	SnakeBody::successLength = false;
+	SnakeBody::used_grow = 0;
+	SnakeBody::used_poison = 0;
+	SnakeBody::used_gate = 0;
+}
+
 bool SnakeBody::successLength = false;
 int SnakeBody::used_grow=0;
 int SnakeBody::used_poison=0;
@@ -98,6 +106,10 @@ void SnakeBody::move(int ch, GameItem * itemManager) {
 		preHead = nowHead;
 		nowHead = snakebody.front();
 		used_grow++;
+		if (nowHead.first == 0 || nowHead.first == MAP_XSIZE || nowHead.second == 0 || nowHead.second == MAP_YSIZE) {
+			isDead = true;
+			return;
+		}
 	}
 
 

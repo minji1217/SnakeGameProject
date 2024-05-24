@@ -10,8 +10,11 @@ SnakeGame::SnakeGame() {
 	//gate= new Gate();
 	itemManager= new GameItem();
 	playGame++;
+	player->init();
 	
 }
+
+
 
 SnakeGame::~SnakeGame() {
 	delete player;
@@ -49,7 +52,8 @@ bool SnakeGame::gameStart() {
 		if (ch != ERR) {
 			player->move(ch, itemManager);
 			if (player->isDead == true) {
-				break;
+				endwin();
+				return false;
 			}
 		}
 		if (isSuccess()) {

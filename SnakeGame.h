@@ -17,6 +17,7 @@ class SnakeGame
 public:
 	~SnakeGame();
 	SnakeGame();
+	
 	bool gameStart();
 	void printMissionBoard();
 	void printStatusBoard();
