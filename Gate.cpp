@@ -1,16 +1,22 @@
 #include "Gate.h"
+#include <vector>
+#include <iostream>
+#include <utility>
+#include "SnakeBody.h"
+#include "Gate.h"
 #include <cstdlib>
 #include <iostream>
 
-Gate::Gate(int BoardxSize, int BoardySize) : BoardxSize(BoardxSize), BoardySize(BoardySize) {
+
+Gate::Gate() : BoardxSize(46), BoardySize(23) {
     generate();
 }
 
 void Gate::generate() {
-    gate1X = rand() % BoardxSize;
-    gate1Y = rand() % BoardySize;
-    gate2X = rand() % BoardxSize;
-    gate2Y = rand() % BoardySize;
+    gate1.first = rand() % BoardxSize;
+    gate1.second = rand() % BoardySize;
+    gate2.first = rand() % BoardxSize;
+    gate2.first = rand() % BoardySize;
 
     // Ensure gates do not overlap with each other
     while (gate1X == gate2X && gate1Y == gate2Y) {
@@ -22,11 +28,13 @@ void Gate::generate() {
 }
 
 void Gate::draw() {
-    std::cout << "Gate 1: (" << gate1X << ", " << gate1Y << ")\n";
-    std::cout << "Gate 2: (" << gate2X << ", " << gate2Y << ")\n";
-}
 
-int Gate::getX1() const { return gate1X; }
-int Gate::getY1() const { return gate1Y; }
-int Gate::getX2() const { return gate2X; }
-int Gate::getY2() const { return gate2Y; }
+    for (it; it != snakebody.end(); it++) {
+        if (it == snakebody.begin()) {
+            mvaddch(it->first, it->second, ' ' | COLOR_PAIR(3));
+        }
+        else {
+            mvaddch(it->first, it->second, ' ' | COLOR_PAIR(3));
+        }
+    }
+}
